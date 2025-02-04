@@ -21,6 +21,15 @@ select
 
 -- Since there is no PARTITION BY clause, this function considers all rows in the result set. The max_refresh_date column will contain the same maximum LOAD_DATE_UTC value for every row in the result set.
 
+select
+                 *,
+                 row_number() over(Partition by Workbook_or_Datasource_Subscriptions_Extract_Name,Date_ist,Project_Name Order by completed_time_ist) as ran
+                     ,max(LOAD_DATE_UTC) over() as max_refresh_date
+
+
+3.
+
+
   
 
 

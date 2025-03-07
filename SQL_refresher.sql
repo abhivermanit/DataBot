@@ -27,7 +27,85 @@ select
                      ,max(LOAD_DATE_UTC) over() as max_refresh_date
 
 
-3.
+3. --Case Statement 
+
+CASE 
+        WHEN UPPER("work_scope") NOT LIKE '%RAP%' 
+            AND "todo_type" IN ('ADDRESS_CHANGE', 'ADDRESS_ISSUE', 'STREET_NAME_CHANGE', 'NAME_ISSUE', 'DISPLAY_ISSUE', 
+                                'LAYER_INGEST_OR_STITCH', 'DISPLAY_ISSUE_LANDCOVER', 'DISPLAY_ISSUE_BUILDINGS', 
+                                'DISPLAY_ISSUE_WATER', 'BUILDING_REVIEW', 'ACTIVITY', 'PROBE_ROUTETEST', 
+                                'PROBE_MISSED_MANEUVER', 'PEDESTRIAN_NAVIGATION_ISSUE', 'CYCLING_ISSUE', 
+                                'MANEUVER_RESTRICTION', 'MISSING_TURN_RESTRICTION', 'STREETS_ISSUE', 
+                                'SUGGESTED_DIRECTION_OF_TRAVEL', 'VEHICULAR_NAVIGATION_ISSUE', 'DANDELION_ROAD_CHANGE', 
+                                'CYCLING_PROBE_ROUTETEST', 'CONGESTION_ZONE_CHANGE', 'CYCLING_BARRIER_ANOMALY', 
+                                'TRAFFIC_CAMERA', 'VENDOR_STREET_CHANGE', 'CYCLING_OVER_INCLUSION', 'TERRITORY_ISSUE', 
+                                'TERRITORY_CONFLATION') 
+            AND UPPER("work_group") = 'MULTI' 
+            THEN 'MULTI'
+        WHEN UPPER("work_scope") NOT LIKE '%RAP%' 
+            AND "todo_type" IN ('ADDRESS_CHANGE', 'ADDRESS_ISSUE', 'STREET_NAME_CHANGE', 'NAME_ISSUE') 
+            AND "is_fast_lane_enable" = 'False' 
+            THEN 'Addressing'
+        WHEN UPPER("work_scope") NOT LIKE '%RAP%' 
+            AND "todo_type" IN ('ADDRESS_CHANGE', 'ADDRESS_ISSUE', 'STREET_NAME_CHANGE', 'NAME_ISSUE') 
+            AND "is_fast_lane_enable" = 'True' 
+            THEN 'Addressing Fast Lane'
+        WHEN UPPER("work_scope") NOT LIKE '%RAP%' 
+            AND "todo_type" IN ('DISPLAY_ISSUE', 'DISPLAY_ISSUE_LANDCOVER', 'DISPLAY_ISSUE_BUILDINGS', 'DISPLAY_ISSUE_WATER', 
+                                'BUILDING_REVIEW', 'LAYER_INGEST_OR_STITCH', 'ACTIVITY') 
+            THEN 'Display'
+        WHEN UPPER("work_scope") NOT LIKE '%RAP%' 
+            AND "todo_type" IN ('PROBE_ROUTETEST', 'PROBE_MISSED_MANEUVER', 'PEDESTRIAN_NAVIGATION_ISSUE', 'CYCLING_ISSUE', 
+                                'MANEUVER_RESTRICTION', 'MISSING_TURN_RESTRICTION', 'STREETS_ISSUE', 
+                                'SUGGESTED_DIRECTION_OF_TRAVEL', 'VEHICULAR_NAVIGATION_ISSUE', 'DANDELION_ROAD_CHANGE', 
+                                'CYCLING_PROBE_ROUTETEST', 'CONGESTION_ZONE_CHANGE', 'CYCLING_BARRIER_ANOMALY', 
+                                'TRAFFIC_CAMERA', 'VENDOR_STREET_CHANGE', 'CYCLING_OVER_INCLUSION') 
+            AND "is_fast_lane_enable" = 'False' 
+            THEN 'Street'
+        WHEN UPPER("work_scope") NOT LIKE '%RAP%' 
+            AND "todo_type" IN ('PROBE_ROUTETEST', 'PROBE_MISSED_MANEUVER', 'PEDESTRIAN_NAVIGATION_ISSUE', 'CYCLING_ISSUE', 
+                                'MANEUVER_RESTRICTION', 'MISSING_TURN_RESTRICTION', 'STREETS_ISSUE', 
+                                'SUGGESTED_DIRECTION_OF_TRAVEL', 'VEHICULAR_NAVIGATION_ISSUE', 'DANDELION_ROAD_CHANGE', 
+                                'CYCLING_PROBE_ROUTETEST', 'CONGESTION_ZONE_CHANGE', 'CYCLING_BARRIER_ANOMALY', 
+                                'TRAFFIC_CAMERA', 'VENDOR_STREET_CHANGE', 'CYCLING_OVER_INCLUSION') 
+            AND "is_fast_lane_enable" = 'True' 
+            THEN 'Street Fast Lane'
+        WHEN UPPER("work_scope") NOT LIKE '%RAP%' 
+            AND "todo_type" IN ('TERRITORY_ISSUE', 'TERRITORY_CONFLATION') 
+            THEN 'Territory'
+        WHEN UPPER("work_scope") NOT LIKE '%RAP%' 
+            AND "todo_type" IN ('CONSTRUCTION_PROJECT', 'UNCATEGORIZED_ISSUE') 
+            THEN 'Construction'
+        WHEN UPPER("work_scope") NOT LIKE '%RAP%' 
+            AND "todo_type" IN ('MISSING_GEOMETRY') 
+            THEN 'Missing Geo'
+        WHEN UPPER("work_scope") NOT LIKE '%RAP%' 
+            AND "todo_type" IN ('INCIDENT_BASEMAP_REVIEW') 
+            THEN 'INCIDENT_BASEMAP_REVIEW'
+        WHEN UPPER("work_scope") NOT LIKE '%RAP%' 
+            AND "todo_type" IN ('BRAVEHEART_FIXUP', 'GEMINI_POI', 'MANUAL_EDIT') 
+            THEN 'Others'
+        WHEN "todo_collection_id" IN ('986464525671727104', '959394714491027456') 
+            AND "work_scope" IN ('RAP', 'RAP_VIP') 
+            --AND "source_vendor" = 'KITTYHAWK' 
+            AND LOWER("project_name") LIKE '%address%' 
+            THEN 'RAP Address'
+        WHEN "todo_collection_id" IN ('986464525671727104', '959394714491027456') 
+            AND "work_scope" IN ('RAP', 'RAP_VIP') 
+            --AND "source_vendor" = 'KITTYHAWK' 
+            AND LOWER("project_name") LIKE '%territory%' 
+            THEN 'RAP Territory'
+        WHEN "todo_collection_id" IN ('986464525671727104', '959394714491027456') 
+            AND "work_scope" IN ('RAP', 'RAP_VIP') 
+            --AND "source_vendor" = 'KITTYHAWK' 
+            AND (LOWER("project_name") NOT LIKE '%territory%' OR LOWER("project_name") NOT LIKE '%address%') 
+            AND (LOWER("project_name") LIKE '%aoi%' OR LOWER("project_name") LIKE '%wilc%') 
+            THEN 'RAP Display'
+        ELSE 'RAP Streets' 
+    END) AS "workstream" 
+
+
+4. 
 
 
   

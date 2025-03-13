@@ -1,0 +1,5 @@
+# Basic LOD operations :
+
+{FIXED [Project Id],[Ticket Id],[Dt]:max
+    (if [Dt]<=[1st_submit_date] then [Edit 1st Working Hrs]+[Edit 1st Consulting Hrs] else 0 end)}
+

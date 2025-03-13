@@ -105,7 +105,11 @@ CASE
     END) AS "workstream" 
 
 
-4. 
+4. Some basic operations 
+
+SUM((working_hrs + consulting_hrs)/3600000) AS productivity_hrs -- to add 2 columns and output a 3rd column 
+
+
 
 
   

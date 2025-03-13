@@ -109,9 +109,17 @@ CASE
 
 SUM((working_hrs + consulting_hrs)/3600000) AS productivity_hrs -- to add 2 columns and output a 3rd column 
 
+AVG(CAST(throughput AS FLOAT) / CAST(productivity_hrs AS FLOAT)) AS productivity
 
+5. Truncating the Date 
 
+DATE_TRUNC('MONTH', DT) AS month 
 
+DT	     Result of DATE_TRUNC('MONTH', DT)
+2025-02-02	2025-02-01   -- the date is getting reset to the first of the month hence it can be grouped by for MoM data
+2025-02-15	2025-02-01 
+2025-03-10	2025-03-01
+2025-01-28	2025-01-01
   
 
 

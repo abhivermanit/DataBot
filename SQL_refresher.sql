@@ -122,6 +122,19 @@ DT	     Result of DATE_TRUNC('MONTH', DT)
 2025-01-28	2025-01-01
   
 
+6. Avoiding the Group By 
+
+select t.* from (
+
+select a.*, max(b.edit_working_hrs) over(partition by b.ticket_id) as edit_working_hrs, -- over is being used to avoid group by 
+max(b.edit_consulting_hrs) over(partition by b.ticket_id) as edit_consulting_hrs,
+row_number()over(partition by a.ticket_id order by a.dt) as rnk
+from MAPS_DATA_SEMANTIC_DB.KH_MAINTENANCE_OPS.EDIT_OVERVIEW_THROUGHPUT_BASE_1_ACTUAL_THROUGHPUT_FINAL a
+left join maps1 b on a.ticket_id = b.ticket_id) t 
+
+where t.rnk = 1
+
+
 
 
 

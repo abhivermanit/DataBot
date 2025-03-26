@@ -140,4 +140,9 @@ Why use OVER() instead of GROUP BY?
 - Multiple aggregations with different partitions:
 
 
+7. where vs having 
 
+select ticket_id, count(1) from maps1 group by ticket_id having count(1) > 1
+
+where - filters rows before aggregation, works on row level data
+having - can work on aggregated values

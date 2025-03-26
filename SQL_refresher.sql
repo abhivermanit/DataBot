@@ -134,8 +134,10 @@ left join maps1 b on a.ticket_id = b.ticket_id) t
 
 where t.rnk = 1
 
-
-
+         
+Why use OVER() instead of GROUP BY?
+- Preserve row-level data:
+- Multiple aggregations with different partitions:
 
 
 

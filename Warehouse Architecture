@@ -16,3 +16,40 @@ MAPS_DATA_SEMANTIC_DB.KH_MAINTENANCE_OPS
 
 
 
+OLAP vs OLTP 
+
+OLAP 
+
+- The data component of OLAP comes from a centralized data store
+- An OLAP cube, also known as multidimensional cube or hypercube
+- Think of it as:
+
+A multi-dimensional version of an Excel Pivot Table.
+
+                 +---------------------+
+                 |    Date Dimension   |
+                 |---------------------|
+                 | Date, Month, Year   |
+                 +---------------------+
+                           |
+                           |
++----------------+   +----------------+   +----------------+
+| Driver Dim     |   |   Orders Fact   |   | Customer Dim   |
+|----------------|<->|----------------|<->|----------------|
+| Name           |   | Revenue        |   | Name           |
+| Age            |   | Delivery Time  |   | City           |
+| City           |   | Order Count    |   | Segment        |
+| Rating         |   +----------------+   +----------------+
++----------------+
+
+( The fact table is the center of the cube, connected to multiple dimensions )
+
+Imagine I work for a food delivery app. In our OLAP cube, the Orders Fact table holds the actual measures like total revenue and delivery time. We surround this with dimensions like Driver, Customer, and Date. 
+Each dimension has attributes — for example, the Driver dimension has Name, Age, City, and Rating. These attributes allow us to slice and dice the fact data.
+For instance, I can analyze average delivery time by driver age group, or total revenue by customer city, or monthly delivery performance.
+
+Each attribute actually maps to a property of the entity from the operational system. In other words, if the driver class in our backend has a property called City, 
+it will become the City attribute inside the OLAP dimension. This is how OLAP cubes structure data for fast and flexible reporting.
+
+
+

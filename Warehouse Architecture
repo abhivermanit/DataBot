@@ -1,0 +1,18 @@
+In Snowflake:
+A Warehouse is NOT a data storage warehouse.
+A Warehouse is just a virtual compute engine.
+
+When you do:
+
+USE WAREHOUSE MAPS_DATA_KH_MAINTENANCE_OPS_04_VWH; 
+
+This just tells Snowflake:
+
+"Hey, use this virtual cluster to process my queries, calculations, and transformations."
+
+But the actual data is stored in:
+
+MAPS_DATA_SEMANTIC_DB.KH_MAINTENANCE_OPS
+
+
+

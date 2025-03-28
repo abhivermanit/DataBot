@@ -43,3 +43,15 @@
 31. What is the difference between AWS S3 and HDFS?
 32. How does AWS Glue work, and when would you use it?
 33. Explain how AWS Lambda can be used in data processing.
+34. What is the difference between Redshift and Athena?
+35. How do you optimize an S3 data lake for faster querying?
+36. What is Apache Kafka, and how does it work?
+37. Explain the difference between Kafka Producer and Consumer.
+38. How do you ensure message ordering in Kafka?
+39. What are Kafka topics and partitions?
+40. How does Kafka handle fault tolerance?
+41. What are some common Spark performance optimization techniques?
+42. How do you optimize data storage in a data lake?
+43. Explain the role of file formats like Parquet and ORC in performance tuning.
+44. What is vectorization in Pandas and Spark, and how does it help in performance?
+45. What are best practices for optimizing SQL queries on large datasets?

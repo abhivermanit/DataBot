@@ -1,0 +1,52 @@
+Downstream Pipeline :---
+
+We use Apache Oozie to orchestrate our workflows, and this (show image if allowed) is a typical example of our pipeline visualized as a DAG (Directed Acyclic Graph).
+
+The pipeline starts with two initialization steps:
+generate-pipeline → patch-secrets-in-pipeline — these typically prepare configurations and secrets for the job.
+
+Then, it kicks off the actual ETL flow with processMaintenanceDelta which is likely responsible for identifying or extracting delta (incremental) data.
+
+Next, processMaintenanceTodoDetailsDump and MaintenanceTablesProcessing_1 are core aggregation or staging steps. They prepare multiple datasets.
+
+Notice that after MaintenanceTablesProcessing_1, the pipeline fans out (parallelism) into multiple tasks:
+
+processMaintenanceTicketEventsTables
+
+processMaintenanceDashboardQueriesTables
+
+processMaintenanceDashboardQueriesTodoAggrTables
+
+processMaintenanceTicketsProjectsTodoAggr1Tables
+
+This means data is being processed for different modules (Tickets, Dashboards, Projects) simultaneously.
+
+
+"My main responsibility is to maintain, enhance, and troubleshoot this pipeline. Specifically, I:
+
+Develop new nodes (jobs) when business wants new aggregations or metrics.
+
+Optimize existing Spark/SQL jobs to improve performance.
+
+Monitor this DAG daily via the Oozie UI and fix failures (data quality, resource issues, EMR errors).
+
+Work closely with downstream consumers like the Dashboard or Analytics teams to ensure data accuracy."
+
+
+Topic	Concepts to Cover
+Data Pipelines	Batch vs Streaming, ETL vs ELT, Pipeline Design Patterns
+DAG Concepts	What is DAG, why acyclic?, parallelism, scheduling
+Workflow Orchestration	Oozie (since you're using it), Airflow basics, dependency management, retries
+Big Data Tools	Spark (RDD, DataFrame, SparkSQL, Optimization, Actions, Transformations)
+Distributed Systems	Partitioning, Shuffling, Fault Tolerance, Checkpointing
+AWS & EMR	How EMR works, EMR + Spark setup, EMRFS, S3 integration
+SQL	Window Functions, Joins, Aggregations, Common Table Expressions (CTE)
+Data Modeling	Star Schema, Snowflake Schema, Fact and Dimension tables
+Performance Tuning	Spark tuning, partitioning strategy, memory optimization
+Monitoring	Logs, Metrics, handling failure scenarios, EMR & Oozie Monitoring
+
+
+"I currently work as a Data Engineer responsible for building and managing distributed data pipelines.
+Most of my work revolves around building Spark jobs orchestrated through Oozie, running on AWS EMR clusters. 
+I ensure that data is ingested, transformed, and made available to downstream systems like dashboards and analytics platforms efficiently and reliably."
+

@@ -50,3 +50,57 @@ Monitoring	Logs, Metrics, handling failure scenarios, EMR & Oozie Monitoring
 Most of my work revolves around building Spark jobs orchestrated through Oozie, running on AWS EMR clusters. 
 I ensure that data is ingested, transformed, and made available to downstream systems like dashboards and analytics platforms efficiently and reliably."
 
+Pipeline Name	Maintenance Pipeline - Snowflake Full Load
+Pipeline ID	Unique ID generated for every Oozie workflow execution
+Cluster	The EMR cluster where Spark & other jobs run (uswest2-emr6-analytics02-gv-prod)
+Artifact	The project/deployment we use (kh-analytics-dashboards - latest)
+User	The ID under which the job runs (kha22)
+Start / End	Pipeline ran on 29th March 2025, took around 4 hours 51 mins
+Status	Job has successfully completed (SUCCEEDED)
+Actions Completed	This pipeline finished 3 actions successfully
+Navigation	We use DAG, Timeline, Actions, Metadata tabs to monitor progress & logs
+
+
+✨ Steps Behind The Scene (Typical Flow)
+Pipeline Trigger (Oozie Workflow + Cron)
+
+Scheduled to run daily.
+
+Starts with a full data pull or delta extraction.
+
+Data Ingestion (Spark + EMR)
+
+Spark reads data from S3 / source systems.
+
+Handles massive volume using distributed processing.
+
+Data Transformation
+
+Business logic applied (joins, filters, aggregations).
+
+Data is split into multiple output tables for dashboards, reports, and monitoring.
+
+Load into Snowflake
+
+Final transformed data is loaded into Snowflake using Snowflake Connector or Snowflake Spark JDBC.
+
+Dashboard Ready
+
+Data is now available for Tableau / Reporting tools.
+
+Stakeholders use this for daily decision-making.
+
+
+"If the pipeline fails, we check Spark UI, EMR logs, Oozie logs to identify the failure point. 
+We fix the issue, whether it's data corruption, resource limits, or logic errors, and then we trigger a rerun either fully or partially depending on the failure point."
+
+
+✅ Simple Story You Can Use
+"Recently, I optimized one of the heavy transformations in this pipeline by reducing unnecessary shuffles and repartitioning, which reduced the runtime by 40 minutes. 
+This not only improved performance but also made downstream Tableau dashboards available earlier every morning."
+
+
+
+
+
+

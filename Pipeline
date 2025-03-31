@@ -101,6 +101,27 @@ This not only improved performance but also made downstream Tableau dashboards a
 
 
 
+This pipeline is part of a data refresh system for Kitty Hawk Maintenance analytics. It does two big jobs:
+
+- Loads & processes data from Snowflake by running a series of Snowflake SQL scripts (via SqlRunner).
+
+- Refreshes Tableau dashboards automatically after the data is ready.
 
 
+Script of the pipeline 
 
+1. Pipeline Metadata & Constants :-----
+
+- pipelineName, pipelineDescription — Just info about what this pipeline is.
+
+- snowflakeScriptRunnerClass — Points to the Java class that will execute Snowflake SQL scripts.
+
+- tableauRefresh — Points to the Java class that triggers Tableau API refresh.
+
+
+2. List of Tableau Dashboards
+
+val khMaintenanceTableauDashboards = List(...)
+
+
+3. 

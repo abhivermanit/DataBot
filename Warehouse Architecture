@@ -52,4 +52,8 @@ Each attribute actually maps to a property of the entity from the operational sy
 it will become the City attribute inside the OLAP dimension. This is how OLAP cubes structure data for fast and flexible reporting.
 
 
+Types of schemas :-
+
+There are three main types of schemas commonly used in data warehouses: Star Schema, Snowflake Schema, and Galaxy Schema.
+
 

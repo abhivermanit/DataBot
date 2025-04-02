@@ -56,4 +56,26 @@ Types of schemas :-
 
 There are three main types of schemas commonly used in data warehouses: Star Schema, Snowflake Schema, and Galaxy Schema.
 
+Dimensions - that provide context to facts (measurable business events).
+
+Attributes - Each dimension has attributes that provide more details. 
+
+Measures - Quantifiable (numerical values) Business Data 
+
+
+Example case study :- UBER Ride App 
+
+Fact Table = Foreign Keys from Dimensions + Metrics (measurable data).
+
+Dimension Table = Descriptive attributes that provide context.
+
+
+
+
+
+
+
+
+
+
 

@@ -432,6 +432,66 @@ ORDER BY 1;
 
 
 
+5. stored procedures 
+
+It is a precompiled and reusable set of database operations that can be called multiple times.
+
+                  In contrast, a regular SQL query is compiled and optimized each time it is executed.
+
+                  Stored procedures can include programming constructs such as conditional statements (IF-ELSE), loops,
+                  and exception handling. Regular SQL queries focus on data retrieval, modification, or manipulation and do not have the same level of control flow capabilities
+
+
+Manually called using CALL procedure_name() or via a Task. 
+
+
+
+                  stored procedure in action :- 
+
+
+                  CREATE OR REPLACE PROCEDURE flag_students_missing_mandatory_courses()
+RETURNS STRING
+LANGUAGE SQL
+AS
+$$
+BEGIN
+  -- Delete previous flags
+  DELETE FROM students_to_review;
+
+  -- Insert students who have not enrolled in all mandatory courses for their major
+  INSERT INTO students_to_review (student_id, student_name, major, missing_courses, flagged_at)
+  SELECT 
+    s.student_id,
+    s.name,
+    s.major,
+    COUNT(c.course_id) AS missing_courses,
+    CURRENT_TIMESTAMP()
+  FROM students s
+  JOIN courses c
+    ON s.major = c.major AND c.mandatory = 'yes'
+  LEFT JOIN enrollments e
+    ON s.student_id = e.student_id AND c.course_id = e.course_id
+  WHERE e.course_id IS NULL
+  GROUP BY s.student_id, s.name, s.major;
+
+  RETURN 'Students flagged for missing mandatory courses.';
+END;
+$$;
+
+
+explanation :- 
+CREATE OR REPLACE PROCEDURE: Creates a new stored procedure or replaces the existing one.
+
+RETURNS STRING: The procedure returns a string message at the end.
+
+LANGUAGE SQL: This is written in SQL (you could also use JavaScript in Snowflake).
+
+$$: Delimiters enclosing the SQL block.
+
+
+         returns the string as a confirmation text that the stored procedure has run 
+
+
 
 
 

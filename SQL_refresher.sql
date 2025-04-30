@@ -148,4 +148,110 @@ where - filters rows before aggregation, works on row level data
 having - can work on aggregated values
 
 
-8. 
+
+
+
+         
+
+Interview Prep :- 
+
+The Employee table holds all employees. The employee table has three columns: Employee Id, Company Name, and Salary.
+
++-----+------------+--------+
+|Id   | Company    | Salary |
++-----+------------+--------+
+|1    | A          | 2341   |
+|2    | A          | 341    |
+|3    | A          | 15     |
+|4    | A          | 15314  |
+|5    | A          | 451    |
+|6    | A          | 513    |
+|7    | B          | 15     |
+|8    | B          | 13     |
+|9    | B          | 1154   |
+|10   | B          | 1345   |
+|11   | B          | 1221   |
+|12   | B          | 234    |
+|13   | C          | 2345   |
+|14   | C          | 2645   |
+|15   | C          | 2645   |
+|16   | C          | 2652   |
+|17   | C          | 65     |
++-----+------------+--------+
+Write a SQL query to find the median salary of each company. Bonus points if you can solve it without using any built-in SQL functions.
+
++-----+------------+--------+
+|Id   | Company    | Salary |
++-----+------------+--------+
+|5    | A          | 451    |
+|6    | A          | 513    |
+|12   | B          | 234    |
+|9    | B          | 1154   |
+|14   | C          | 2645   |
++-----+------------+--------+
+
+
+My approach :- 
+
+select id, company, case when nums%2 == 0 then num/2 as value else null,
+case when nums%2 == 0 then (num/2 + 1) as value else null, 
+case when nums%2 != 0 then (num/2 + 1) as value else null end as values
+from (
+ select id, company, salary, count(id) as nums,
+ over(partition by company order by salary desc) as salary
+ from company_salaries) a 
+ having values not null
+
+
+corrected approach :- 
+
+WITH ranked AS (
+  SELECT *,
+         ROW_NUMBER() OVER (PARTITION BY Company ORDER BY Salary) AS rn,
+         COUNT(*) OVER (PARTITION BY Company) AS nums
+  FROM company_salaries
+),
+median_rows AS (
+  SELECT Id, Company, Salary, nums, rn
+  FROM ranked
+  WHERE 
+    (nums % 2 = 1 AND rn = (nums + 1) / 2) OR
+    (nums % 2 = 0 AND (rn = nums / 2 OR rn = nums / 2 + 1))
+)
+SELECT Id, Company, Salary FROM median_rows
+
+
+takeaways :- 
+
+- where condition can be used to filter and no need to keep that column in select 
+- having cannot be used without agg 
+- FWG HSD OL
+- OVER is always accompanied by a function 
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

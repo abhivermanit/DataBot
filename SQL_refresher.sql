@@ -348,7 +348,87 @@ group by country
 
 
 
-         4. 
+         4. multiple tables question
+         
+         
+         
+         students table:
+
+ +------------+------------------+------------------+
+ | student_id | name             | major            |
+ +------------+------------------+------------------+
+ | 1          | Alice            | Computer Science |
+ | 2          | Bob              | Computer Science |
+ | 3          | Charlie          | Mathematics      |
+ | 4          | David            | Mathematics      |
+ +------------+------------------+------------------+
+ 
+courses table:
+
+ +-----------+-------------------+---------+------------------+----------+
+ | course_id | name              | credits | major            | mandatory|
+ +-----------+-------------------+---------+------------------+----------+
+ | 101       | Algorithms        | 3       | Computer Science | yes      |
+ | 102       | Data Structures   | 3       | Computer Science | yes      |
+ | 103       | Calculus          | 4       | Mathematics      | yes      |
+ | 104       | Linear Algebra    | 4       | Mathematics      | yes      |
+ | 105       | Machine Learning  | 3       | Computer Science | no       |
+ | 106       | Probability       | 3       | Mathematics      | no       |
+ | 107       | Operating Systems | 3       | Computer Science | no       |
+ | 108       | Statistics        | 3       | Mathematics      | no       |
+ +-----------+-------------------+---------+------------------+----------+
+ 
+enrollments table:
+
+ +------------+-----------+-------------+-------+-----+
+ | student_id | course_id | semester    | grade | GPA |
+ +------------+-----------+-------------+-------+-----+
+ | 1          | 101       | Fall 2023   | A     | 4.0 |
+ | 1          | 102       | Spring 2023 | A     | 4.0 |
+ | 1          | 105       | Spring 2023 | A     | 4.0 |
+ | 1          | 107       | Fall 2023   | B     | 3.5 |
+ | 2          | 101       | Fall 2023   | A     | 4.0 |
+ | 2          | 102       | Spring 2023 | B     | 3.0 |
+ | 3          | 103       | Fall 2023   | A     | 4.0 |
+ | 3          | 104       | Spring 2023 | A     | 4.0 |
+ | 3          | 106       | Spring 2023 | A     | 4.0 |
+ | 3          | 108       | Fall 2023   | B     | 3.5 |
+ | 4          | 103       | Fall 2023   | B     | 3.0 |
+ | 4          | 104       | Spring 2023 | B     | 3.0 |
+ +------------+-----------+-------------+-------+-----+
+ 
+
+
+WITH
+    T AS (
+        SELECT student_id
+        FROM enrollments
+        GROUP BY 1
+        HAVING AVG(GPA) >= 2.5
+    )
+SELECT student_id
+FROM
+    T
+    JOIN students USING (student_id)
+    JOIN courses USING (major)
+    LEFT JOIN enrollments USING (student_id, course_id)
+GROUP BY 1
+HAVING
+    SUM(mandatory = 'yes' AND grade = 'A') = SUM(mandatory = 'yes')
+    AND SUM(mandatory = 'no' AND grade IS NOT NULL) = SUM(mandatory = 'no' AND grade IN ('A', 'B'))
+    AND SUM(mandatory = 'no' AND grade IS NOT NULL) >= 2
+ORDER BY 1;
+
+
+
+
+
+
+
+
+         - feeding into sql tables first the datatypes and the columns, then the values with comma for all columns 
+         - how to use having for multiple conditions 
+         - in multiple tables always filter out the condition which gives the least rows 
 
 
 

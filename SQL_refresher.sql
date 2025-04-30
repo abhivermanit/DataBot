@@ -290,7 +290,7 @@ takeaways
 
 
 
-         3. 
+         3. Write a solution to find the top three wineries in each country based on their total points.
 
 
 
@@ -321,7 +321,34 @@ Output:
 
          
 
+approach :-
 
+         with cte as(
+select country, winery, points, 
+row_number() over(partition by country order by points desc) as rn 
+from WineRatings) 
+
+
+SELECT 
+  country,
+  COALESCE(MAX(CASE WHEN rn = 1 THEN CONCAT(winery, ' (', points, ')') END), 'No top winery') AS top_winery,
+  COALESCE(MAX(CASE WHEN rn = 2 THEN CONCAT(winery, ' (', points, ')') END), 'No second winery') AS second_winery,
+  COALESCE(MAX(CASE WHEN rn = 3 THEN CONCAT(winery, ' (', points, ')') END), 'No third winery') AS third_winery
+FROM cte
+group by country
+
+
+         takeaways :- 
+         1. case is used to convert from columns to rows 
+         2. concat is a function to add columns together 
+         3. coalesce to substitute the null values 
+         4. MAX is used here to restrict to 1 row in the columns top_winery, second_winery, third_winery
+
+
+
+
+
+         4. 
 
 
 

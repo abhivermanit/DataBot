@@ -155,6 +155,8 @@ having - can work on aggregated values
 
 Interview Prep :- 
 
+         1. 
+
 The Employee table holds all employees. The employee table has three columns: Employee Id, Company Name, and Salary.
 
 +-----+------------+--------+
@@ -227,17 +229,97 @@ takeaways :-
 - having cannot be used without agg 
 - FWG HSD OL
 - OVER is always accompanied by a function 
-- 
+
+
+
+  2.
+
+Write a SQL to get the cumulative sum of an employee's salary over a period of 3 months but exclude the most recent month.
+
+The result should be displayed by 'Id' ascending, and then by 'Month' descending.
+
+Example
+Input
+
+| Id | Month | Salary |
+|----|-------|--------|
+| 1  | 1     | 20     |
+| 2  | 1     | 20     |
+| 1  | 2     | 30     |
+| 2  | 2     | 30     |
+| 3  | 2     | 40     |
+| 1  | 3     | 40     |
+| 3  | 3     | 60     |
+| 1  | 4     | 60     |
+| 3  | 4     | 70     |
+Output
+
+| Id | Month | Salary |
+|----|-------|--------|
+| 1  | 3     | 90     |
+| 1  | 2     | 50     |
+| 1  | 1     | 20     |
+| 2  | 1     | 20     |
+| 3  | 3     | 100    |
+| 3  | 2     | 40     |
+
+
+         approach :- 
+
+
+
+
+with cte as(
+select Id, Month,salary,
+row_number() over(partition by id order by month desc) as nums
+from EmployeeSalary) 
+
+select id, month , sum(salary) over(PARTITION BY Id ORDER BY Month) from cte 
+where nums != 1
+order by id asc, month desc
+
+
+takeaways 
+
+
+1. sum(salary) over(PARTITION BY Id ORDER BY Month) from cte  - cumulative logic 
+         2. order by id asc, month desc - this is done so that all id come together 
 
 
 
 
 
 
+         3. 
 
 
 
+         Input: 
+Sessions table:
++-----+-----------+--------+-----------------+
+| id  | country   | points | winery          | 
++-----+-----------+--------+-----------------+
+| 103 | Australia | 84     | WhisperingPines | 
+| 737 | Australia | 85     | GrapesGalore    |    
+| 848 | Australia | 100    | HarmonyHill     | 
+| 222 | Hungary   | 60     | MoonlitCellars  | 
+| 116 | USA       | 47     | RoyalVines      | 
+| 124 | USA       | 45     | Eagle'sNest     | 
+| 648 | India     | 69     | SunsetVines     | 
+| 894 | USA       | 39     | RoyalVines      |  
+| 677 | USA       | 9      | PacificCrest    |  
++-----+-----------+--------+-----------------+
+Output: 
++-----------+---------------------+-------------------+----------------------+
+| country   | top_winery          | second_winery     | third_winery         |
++-----------+---------------------+-------------------+----------------------+
+| Australia | HarmonyHill (100)   | GrapesGalore (85) | WhisperingPines (84) |
+| Hungary   | MoonlitCellars (60) | No second winery  | No third winery      | 
+| India     | SunsetVines (69)    | No second winery  | No third winery      |  
+| USA       | RoyalVines (86)     | Eagle'sNest (45)  | PacificCrest (9)     | 
++-----------+---------------------+-------------------+----------------------+
 
+         
 
 
 

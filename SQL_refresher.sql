@@ -493,9 +493,19 @@ $$: Delimiters enclosing the SQL block.
 
 
 
+6. 
+
+                                 CTE (WITH clause)	                    Temporary Table (CREATE TEMP TABLE)
+        
+🧠 Purpose	Logical, in-memory subquery used within a query	Physically exists (briefly) in the session
+
+🔁 Reusability	Not reusable outside the single SQL statement	Reusable within the session for multiple queries
+
+✅ DDL Allowed?	❌ No (can’t do CREATE TABLE, etc. inside CTE)	✅ Yes (you can CREATE, ALTER, etc.)
 
 
 
+7. Distinct vs UNIQUE
 
 
 

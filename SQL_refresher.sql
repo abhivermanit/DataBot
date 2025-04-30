@@ -510,6 +510,37 @@ $$: Delimiters enclosing the SQL block.
 
 
 
+8. Recursive CTE 
+
+Employees table:
++-------------+---------------+------------+
+| employee_id | employee_name | manager_id |
++-------------+---------------+------------+
+| 1           | Boss          | 1          |
+| 3           | Alice         | 3          |
+| 2           | Bob           | 1          |
+| 4           | Daniel        | 2          |
+| 7           | Luis          | 4          |
+| 8           | Jhon          | 3          |
+| 9           | Angela        | 8          |
+| 77          | Robert        | 1          |
++-------------+---------------+------------+
+
+Result table:
++-------------+
+| employee_id |
++-------------+
+| 2           |
+| 77          |
+| 4           |
+| 7           |
++-------------+
+
+The head of the company is the employee with employee_id 1.
+The employees with employee_id 2 and 77 report their work directly to the head of the company.
+The employee with employee_id 4 report his work indirectly to the head of the company 4 --> 2 --> 1.
+The employee with employee_id 7 report his work indirectly to the head of the company 7 --> 4 --> 2 --> 1.
+The employees with employee_id 3, 8 and 9 don't report their work to head of company directly or indirectly.
 
 
 

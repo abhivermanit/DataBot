@@ -543,5 +543,6 @@ The employee with employee_id 7 report his work indirectly to the head of the co
 The employees with employee_id 3, 8 and 9 don't report their work to head of company directly or indirectly.
 
 
+         
 
 

@@ -544,5 +544,48 @@ The employees with employee_id 3, 8 and 9 don't report their work to head of com
 
 
          
+9. Using partition by in the where condition 
+
+select "ticket_id", "is_fast_lane_enable", row_number() over(partition by "ticket_id" order by "ticket_id" asc) > 1 as rn
+from MAPS_DATA_SEMANTIC_DB.KH_MAINTENANCE_OPS_APP.KH_MAINTENANCE_EDIT_OVERVIEW_DASHBOARD_SOURCE3_1
+where "work_scope" in ('RAP', 'RAP_VIP') and row_number() over(partition by "ticket_id") > 1
+
+-- because window functions like ROW_NUMBER() are not allowed in the WHERE clause — they are applied after filtering (i.e., in the logical query processing order, window functions are evaluated after WHERE).
+         -- row numbers are used with order by 
+         -- qualify can be used instead of where to filter out the over window functions 
+         -- You're using QUALIFY, which is great — that's the correct way to filter on a window function in databases like Snowflake, BigQuery, and others that support it.
+
+         
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         

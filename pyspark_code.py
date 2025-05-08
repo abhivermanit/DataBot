@@ -41,7 +41,7 @@ print("Most repeated word: " + frequent_word)
 print("Frequency: " + str(frequency))
 file.close();
 
-# The above is a python program now if we convert this to pyspark 
+# The above is a python program now if we convert this to RDD  
 
 from pyspark import SparkContext
 
@@ -68,16 +68,35 @@ print("Frequency:", most_frequent[0][1])
 sc.stop()
 
 
+# Word Count Using DataFrame API on the same script 
+
+# Read the file into a DataFrame with one column called 'line'
+df = spark.read.text("/databricks-datasets/samples/docs/README.md")
+df.show(5, truncate=False)
 
 
+from pyspark.sql.functions import explode, split, lower, regexp_replace
+
+# Clean and split lines into words
+words_df = df.select(
+    explode(
+        split(
+            regexp_replace(lower(df.value), '[^a-zA-Z0-9 ]', ''), 
+            ' '
+        )
+    ).alias("word")
+)
+
+words_df.show(10)
 
 
+word_counts_df = words_df.groupBy("word").count()
+word_counts_df.orderBy("count", ascending=False).show(10)
 
 
-
-
-
-
+most_frequent_word = word_counts_df.orderBy("count", ascending=False).first()
+print(f"Most frequent word: {most_frequent_word['word']}")
+print(f"Frequency: {most_frequent_word['count']}")
 
 
 

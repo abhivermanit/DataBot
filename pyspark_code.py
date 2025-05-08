@@ -1,4 +1,4 @@
-1. # Python program to find the most repeated word 
+# Python program to find the most repeated word 
 # in a text file
 
 # A file named "gfg", will be opened with the 
@@ -41,4 +41,46 @@ print("Most repeated word: " + frequent_word)
 print("Frequency: " + str(frequency))
 file.close();
 
-2. 
+# The above is a python program now if we convert this to pyspark 
+
+from pyspark import SparkContext
+
+sc = SparkContext("local", "WordCountApp")
+
+# Read the file into an RDD
+lines = sc.textFile("gfg.txt")
+
+# Split lines into words, remove punctuation, and make lowercase
+words = lines.flatMap(lambda line: line.lower().replace(',', '').replace('.', '').split())
+
+# Map each word to a tuple (word, 1)
+word_pairs = words.map(lambda word: (word, 1))
+
+# Reduce by key (word) to count frequencies
+word_counts = word_pairs.reduceByKey(lambda a, b: a + b)
+
+# Find the most frequent word
+most_frequent = word_counts.takeOrdered(1, key=lambda x: -x[1])
+
+print("Most repeated word:", most_frequent[0][0])
+print("Frequency:", most_frequent[0][1])
+
+sc.stop()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

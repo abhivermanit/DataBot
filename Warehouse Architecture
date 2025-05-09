@@ -100,6 +100,43 @@ Data Lake and Data Warehouse both being used by organizations :-
 
 
 
+1 
+
+
+| **ETL Step**  | **What Happens**                                       | **Example**                                                    |
+| ------------- | ------------------------------------------------------ | -------------------------------------------------------------- |
+| **Extract**   | Pull raw data from various sources.                    | Logs from Kafka, events from APIs, files from S3.              |
+| **Transform** | Clean, join, enrich, filter, deduplicate the data.     | PySpark or dbt jobs transform the raw data into usable tables. |
+| **Load**      | Save the clean, structured data into a data warehouse. | Write final tables to **Snowflake** (or BigQuery, Redshift).   |
+
+
+
+How to optimize the query speed in snwoflake after the spark + iceberg - Use case of performance tuning 
+
+
+2 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -121,7 +121,7 @@ File formats and table formats:-
 
 | File Format | Type             | Usage Context                              |
 | ----------- | ---------------- | ------------------------------------------ |
-| **CSV**     | Text             | Simple flat files, small data, quick loads |
+| **CSV**     | Row Based        | Simple flat files, small data, quick loads |
 | **JSON**    | Semi-structured  | Logs, web data, flexible schema            |
 | **Avro**    | Row-based binary | Kafka, streaming data, schema evolution    |
 | **Parquet** | Columnar         | Analytics, Spark, Hive, AWS Athena, etc.   |
@@ -130,6 +130,14 @@ File formats and table formats:-
 | **Iceberg** | Table format     | Open table format with schema evolution    |
 | **Hudi**    | Table format     | Incremental data processing, updates       |
 
+
+Columnar vs Row Based:-
+
+columnar storage was before parquet as well 
+
+parquet introduces something called row group 
+
+columnar storage depending upon the query ask just selects the columns that are required for the output 
 
 
 

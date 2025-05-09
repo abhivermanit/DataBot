@@ -111,10 +111,25 @@ Data Lake and Data Warehouse both being used by organizations :-
 
 
 
-How to optimize the query speed in snwoflake after the spark + iceberg - Use case of performance tuning 
+How to optimize the query speed in snowflake after the spark + iceberg - Use case of performance tuning 
 
 
 2 
+
+
+File formats and table formats:- 
+
+| File Format | Type             | Usage Context                              |
+| ----------- | ---------------- | ------------------------------------------ |
+| **CSV**     | Text             | Simple flat files, small data, quick loads |
+| **JSON**    | Semi-structured  | Logs, web data, flexible schema            |
+| **Avro**    | Row-based binary | Kafka, streaming data, schema evolution    |
+| **Parquet** | Columnar         | Analytics, Spark, Hive, AWS Athena, etc.   |
+| **ORC**     | Columnar         | Optimized for Hive, better compression     |
+| **Delta**   | Table format     | Databricks-native, versioned tables        |
+| **Iceberg** | Table format     | Open table format with schema evolution    |
+| **Hudi**    | Table format     | Incremental data processing, updates       |
+
 
 
 

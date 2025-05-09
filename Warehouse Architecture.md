@@ -135,7 +135,7 @@ Columnar vs Row Based:-
 
 columnar storage was before parquet as well 
 
-parquet introduces something called row group 
+parquet introduces something called row group - columnar + row group
 
 columnar storage depending upon the query ask just selects the columns that are required for the output 
 

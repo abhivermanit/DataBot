@@ -13,3 +13,4 @@
 
 - analytical purposes we will choose star schema
 - 
+

@@ -33,4 +33,7 @@
        - 
 - 3. user table
      - user_id (primary key)
-     - 
+    
+- make multiple dimension and attribute tables
+
+- 

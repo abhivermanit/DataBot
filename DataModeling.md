@@ -1,4 +1,4 @@
-## SmartDraw tool used to data model
+ ## SmartDraw tool used to data model
 
 - Work with all the business teams, and their core operational business
 - We design and deliver solutions building the data models from scratch

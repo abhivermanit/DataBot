@@ -85,6 +85,46 @@ Dimension Table = Descriptive attributes that provide context.
 
 
 
+modeling data for UBER :- 
+
+- if the model design is not accurate then the query performance will never be accurate at the end of the day
+- so let's take the example of a ride sharing app
+- In production, I design data models using a combination of dimensional modeling and modern data stack tools, focusing on scalability, performance, and alignment with business requirements.
+
+Using the tech stack for data modeling :- 
+
+- Snowflake as the cloud data warehouse. I native features like views, materialized views, and clustering/partitioning strategies for performance optimization.
+-  I use Delta Lake for handling slowly changing dimensions (SCD), maintaining data versioning, and ensuring data quality through ACID transactions.
+-  We process raw data using Scala and PySpark
+-  dbt for managing transformation logic in SQL and organizing the data models into layers — staging, intermediate, and mart — with clear lineage, documentation, and testing.
+-  For visualizing schema relationships/ logical architecture of schema Lucidchart/SmartDraw to align the model with business stakeholders.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

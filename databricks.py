@@ -109,6 +109,15 @@ so this starts at the first character. **
 
           df = df.na.drop().show()   #show all rows except the null
 
+        
+- group by 
+
+df.groupBy("col1").count() .show()
+
+- order by
+
+df.orderBy(["col1", "col2"],ascending=[0,1]).collect() 
+
 
 
 

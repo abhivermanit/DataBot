@@ -87,9 +87,27 @@ so this starts at the first character. **
 
 
 
-    
+    - distinct 
+
+    df_new = df.dropDuplicates()
 
 
+    - add update and remove columns, column operations 
+
+          df = df.withColumnRenamed('telephonenumber' , 'phonenumber')
+
+          ** with select statement the columns are double quotes, with df or functions it it single quote 
+
+
+          Missing Values :- 
+
+          df = df.drop("col1", "col2") 
+
+          df = df.na.replace(10,20).show()
+
+          df = df.na.fill(50).show()
+
+          df = df.na.drop().show()   #show all rows except the null
 
 
 

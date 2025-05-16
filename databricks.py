@@ -31,3 +31,54 @@ SparkSession: This is the entry point to using Spark in Databricks. It allows yo
 Row: The Row is used to define a structure for the data. It's similar to a row in a table.
 
 createDataFrame: This function is used to convert the list of rows into a DataFrame.
+
+
+
+
+
+Data sources for spark - JSON, parquet, txt
+
+
+-    forming dataframes 
+
+   >>>  df = spark.read.json("customer.json")
+     >>>   df3 = spark.read.load("users.parquet")
+>>> df4 = spark.read.text("people.txt") 
+
+
+- select statement 
+
+df.select()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    

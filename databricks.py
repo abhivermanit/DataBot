@@ -76,7 +76,18 @@ columns is with df and functions are used with F
 
 >>> df.select("firstname", df.lastname.startswith("Sm")). show()
 
+>>> df.select(df.firstname.substr(1,3).alias("name")).collect()
 
+** In PySpark, substr() is 1-indexed (unlike Python, which is 0-indexed), 
+so this starts at the first character. **
+
+    ** .collect retrieves all the rows and collects them together as a list **
+
+>>> df.select(df.age.between(22,24)).show()
+
+
+
+    
 
 
 

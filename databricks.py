@@ -32,7 +32,17 @@ Row: The Row is used to define a structure for the data. It's similar to a row i
 
 createDataFrame: This function is used to convert the list of rows into a DataFrame.
 
+import pyspark files 
 
+
+>>> from pyspark.sql import SparkSession
+>>> spark = SparkSession \
+ .builder \
+ .appName("appname") \
+ .config(,) \
+ .getOrCreate()
+
+>>> from pyspark.sql import functions as F
 
 
 
@@ -49,6 +59,24 @@ Data sources for spark - JSON, parquet, txt
 - select statement 
 
 df.select()
+
+column name can be entered to view values, [] is used when some operation/function is to be applied to the column/ specific columns, along with df
+
+
+
+- filter conditions
+
+>>> df.select(df["age"] > 24).show()
+
+>>> df.select(df["firstname"], df["age"] + 1).show()
+
+>>> df.select("firstname", F.when(df.age > 30, 1).otherwise(0)) 
+
+columns is with df and functions are used with F
+
+>>> df.select("firstname", df.lastname.startswith("Sm")). show()
+
+
 
 
 

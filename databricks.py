@@ -152,6 +152,25 @@ Optimize a PySpark job for large datasets
     This data shuffling makes groupBy() a wide transformation.
 
 
+- The join() transformation combines rows from two DataFrames based on a common key. It could be a left join, right join, inner join, etc.
+
+- a broadcast join can avoid shuffling when one dataset is small enough to fit in memory.
+    one of the tables is small enough to be copied to all the worker nodes. 
+    Instead of shuffling large datasets across the network, the small dataset is "broadcast" to every node, avoiding a costly data shuffle.
+
+- large_df: 100 GB table (sales transactions)
+  small_df: 1 MB table (country codes)
+
+  from pyspark.sql.functions import broadcast
+
+joined_df = large_df.join(broadcast(small_df), on="country_code")
+
+
+- In this case, Spark will shuffle the data to ensure that rows with identical values are detected across the entire dataset, making distinct() a wide transformation.
+
+
+How to do partitioning and repartitioning :-
+
 - 
 
 

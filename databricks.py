@@ -126,6 +126,33 @@ df.orderBy(["col1", "col2"],ascending=[0,1]).collect()
 
 
 
+Optimize a PySpark job for large datasets
+
+1. Efficient Data Partitioning: Repartition and Coalesce
+
+2. Use Broadcast Joins for Small Datasets
+
+3. Cache and Persist Data
+
+4. Choose Efficient File Formats (Parquet/Delta)
+
+5. Tune Spark Configuration for Resources
+
+
+- Proper partitioning ensures that Spark can distribute the work across executors efficiently, minimizing the cost of shuffling and improving parallelism.
+    - By repartitioning, you control how many partitions your data is split into across the cluster.
+    - Repartitioning is done before wide transformations
+    - wide transformations - require shuffling data across multiple nodes - expensive operations
+    - wide transformations - groupBy, join, or distinct
+    - narrow transformations - map(), filter(), select(), union(), etc. - they operate on a single partition of data 
+
+
+- In this case, if the data isn't already partitioned by product_id, 
+    Spark will shuffle the data across partitions to group all the rows with the same product_id together. 
+    This data shuffling makes groupBy() a wide transformation.
+
+
+- 
 
 
 

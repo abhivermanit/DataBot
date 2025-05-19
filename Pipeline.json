@@ -132,31 +132,36 @@ val khMaintenanceTableauDashboards = List(...)
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-spark pipelines 
+SPARK PIPELINE :-
 
-Data Ingest :: Analytics Utility :: Warehouse to Snowflake - pipeline to move and transform data, likely from a warehouse into Snowflake. 
+how large companies build and manage their data infrastructure using tools that help automate, schedule, and run data workflows at scale.
 
-{
-  "files": [],
-  "configuration": {
-    "njl.driver.argument.queue": "POI.GEMINI.NONCASSANDRA.NONPRIORITY",
-    "spark.executor.memory": "18971M"
-  },
-  "metadata": {},
-  "ignoreClusterConfiguration": false,
-  "processContext": "processcontext=POI.poi_offline_exports-dev.GEMINI.NONCASSANDRA.NONPRIORITY/uniqueId/Snowflake",
-  "timeout": 12,
-  "email": {
-    "usernames": [
-      "david_avon",
-      "dataops_bot"
-    ],
-    "groups": []
-  }
-}
+An Enterprise Data Platform is a system 
+
+- Cloud storage (S3, ADLS)
+
+- Data warehouses (Snowflake, BigQuery, Redshift)
+
+- Data processing engines (Spark, Flink, Hive)
+
+- Workflow orchestration (Oozie, Airflow)
 
 
-"spark.executor.memory"	Sets the amount of memory each Spark executor gets (here, 18,971 MB or ~18.5 GB).
+Pipeline Configuration :-
+
+Spectrum Compliance Snowflake Pipeline
+
+- The pipeline config (JSON or XML for Oozie) is stored in a Git repo.
+
+- 
+
+
+
+
+
+
+
+
 
 
 

@@ -125,3 +125,64 @@ val khMaintenanceTableauDashboards = List(...)
 
 
 3. 
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+spark pipelines 
+
+Data Ingest :: Analytics Utility :: Warehouse to Snowflake - pipeline to move and transform data, likely from a warehouse into Snowflake. 
+
+{
+  "files": [],
+  "configuration": {
+    "njl.driver.argument.queue": "POI.GEMINI.NONCASSANDRA.NONPRIORITY",
+    "spark.executor.memory": "18971M"
+  },
+  "metadata": {},
+  "ignoreClusterConfiguration": false,
+  "processContext": "processcontext=POI.poi_offline_exports-dev.GEMINI.NONCASSANDRA.NONPRIORITY/uniqueId/Snowflake",
+  "timeout": 12,
+  "email": {
+    "usernames": [
+      "david_avon",
+      "dataops_bot"
+    ],
+    "groups": []
+  }
+}
+
+
+"spark.executor.memory"	Sets the amount of memory each Spark executor gets (here, 18,971 MB or ~18.5 GB).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

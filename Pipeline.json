@@ -153,10 +153,116 @@ Spectrum Compliance Snowflake Pipeline
 
 - The pipeline config (JSON or XML for Oozie) is stored in a Git repo.
 
-- 
+- This configuration sets up how a Spark job will be submitted and executed on a Hadoop cluster with the below points
+
+1. Resource allocation (memory, cores, instances)
+
+2. Job behavior (timeouts, dynamic allocation)
+
+3. Cluster scheduling (queue name, fairness)
+
+4. Snowflake export likely happens at the end via a connector or JDBC
+
+
+val sparkConfigs = Map(
+    "spark.executor.cores" -> "4",
+    "spark.scheduler.mode" -> "FAIR",
+    "spark.executor.heartbeatInterval" -> "60s",
+    "spark.app.name" -> "processcontext=ANALYTICS.kh-build-ops-analytics-prod.AGGREGATES_PROD usercontext=kha22",
+    "spark.yarn.am.memory" -> "48g",
+    "spark.driver.memory" -> "48g",
+    "spark.driver.userClassPathFirst" -> "false",
+    "spark.dynamicAllocation.maxExecutors" -> "10",
+    "spark.network.timeout" -> "3600s",
+    "spark.rpc.askTimeout" -> "3600s",
+    "spark.rpc.message.maxSize" -> "850",
+    "spark.yarn.am.waitTime" -> "3600s",
+    "spark.dynamicAllocation.minExecutors" -> "1",
+    "spark.executor.userClassPathFirst" -> "false",
+    "spark.yarn.queue" -> "ANALYTICS.AGGREGATES_PROD.AGGREGATES_PROD",
+    "spark.executor.instances" -> "5",
+    "spark.storage.memoryFraction" -> "0.05",
+    "spark.executor.memory" -> "16g",
+    "spark.kryoserializer.buffer.max" -> "1024m",
+    "spark.shuffle.service.enabled" -> "true",
+    "spark.yarn.driver.memoryOverhead" -> "4096",
+    "spark.yarn.am.memoryOverhead" -> "4096",
+    "spark.yarn.executor.memoryOverhead" -> "1600",
+    "spark.driver.extraClassPath" -> "../config/hadoop-alt:../config/hive"
+  )
+
+1. Core Resource Settings
+
+"spark.executor.cores" -> "4"
+"spark.executor.memory" -> "16g"
+"spark.executor.instances" -> "5"
+"spark.driver.memory" -> "48g"
+
+Each executor gets 4 CPU cores.
+More cores = more parallel tasks per executor.
+Each executor gets 16 GB RAM (for processing).
+5 executors will be launched.
+
+Total Spark resources: 5 executors × 4 cores = 20 cores, and 5 × 16 GB = 80 GB of executor memory (plus overhead).
+
+The driver (master program) and ApplicationMaster get 48 GB RAM — quite high, meaning your pipeline is doing substantial orchestration or data movement.
+
+
+2. Execution Environment & Optimization
+
+"spark.dynamicAllocation.minExecutors" -> "1"
+"spark.dynamicAllocation.maxExecutors" -> "10"
+
+Spark will scale executors between 1 and 10 based on the job load.
+
+Works only if dynamic allocation is enabled 
+
+"spark.shuffle.service.enabled" -> "true"
+
+Required for dynamic allocation to work (because shuffled data may be reused between executors).
+
+"spark.storage.memoryFraction" -> "0.05"
+
+Only 5% of executor memory is used for caching/storage. You’re optimizing more for computation than caching.
+
+Executor memory in Spark is divided between:
+Storage memory → used for caching (e.g., .cache(), .persist() results).
+Execution memory → used for computation (e.g., joins, shuffles, aggregations).
+
+Optimization - Not caching large reused DataFrames means missed opportunity for faster pipelines.
+Performance	Without caching - Spark recomputes data multiple times, increasing job duration.
+
+Caching - It allows Spark to keep data in memory rather than recomputing it or reading it again from disk or a remote source (like Snowflake or HDFS).
+
+When you re-use the same DataFrame/RDD multiple times, Spark will by default recompute it each time unless you tell it to cache or persist.
+
+Persist - Storage Level	MEMORY_AND_DISK (default)	Customizable (e.g., MEMORY_ONLY, DISK_ONLY)
+Caching - Usage Simplicity	Shorthand for common case	Flexible with more options
+
+
+Why Spark Recomputes Without cache() ? 
+
+- Spark uses lazy evaluation, so it doesn’t immediately execute this line.
+It builds a logical execution plan (a DAG) — a graph of operations to be executed only when an action is triggered (like .count(), .collect(), .write()).
+
+{val df = spark.read.parquet("/big/path")
+val filtered = df.filter("status = 'active'").select("user_id")
+
+val result1 = filtered.groupBy("user_id").count()
+val result2 = filtered.where("user_id > 1000").count()} 
+
+For result1, Spark builds a DAG that goes:
+Read Parquet → Filter → Select → GroupBy
+
+For result2, Spark builds another DAG:
+Read Parquet → Filter → Select → Where
 
 
 
+
+
+
+3. 
 
 
 

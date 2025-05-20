@@ -287,7 +287,7 @@ what will perfomance tuning solve:-
 3. Be more stable and scalable
 
 
-how is it done:- 
+pointers to look at to tune:- 
 
 - Cluster resources (executors, memory, cores)
 
@@ -298,9 +298,45 @@ how is it done:-
 - Job logic (code structure, transformations)
 
 
+Level	                                    Focus Areas
+System-level tuning	        Spark config parameters (like memory, timeouts)
+Application-level tuning	How your job logic and DataFrames are written
+
+
+"spark.executor.heartbeatInterval" -> "60s"
+Each executor sends a heartbeat to the driver every 60 seconds.
+If executors are doing long GC or complex tasks, they might not heartbeat in time, and the driver will think they're dead.
+Increase this (e.g., to 60s–120s) for heavy workloads or long tasks.
+
+"spark.network.timeout" -> "3600s"
+For long-running jobs, this prevents Spark from killing healthy but busy nodes.
+
+"spark.rpc.message.maxSize" -> "850"
+Limits the size of messages sent between executors and the driver.
+If you're transferring big broadcast variables or shuffle blocks, too small a size causes failures.
+850 mb is a huge size
+
+
+How tuninng is done in real life :-
+| Step | What to Do                    | Tools/How                                         |
+| ---- | ----------------------------- | ------------------------------------------------- |
+| 1    | Understand workload           | DAG + Spark UI + Metrics                          |
+| 2    | Tune memory & executors       | `executor.memory`, `executor.cores`, `instances`  |
+| 3    | Fix skew & shuffles           | Partitioning, avoid wide joins                    |
+| 4    | Tune caching                  | `cache()`, `persist()` + `storage.memoryFraction` |
+| 5    | Tune timeouts & communication | Like the ones you asked about                     |
+| 6    | Benchmark & monitor           | Spark History Server, Ganglia, CloudWatch, etc.   |
 
 
 
+| Config                         | Typical Range             | Purpose                            |
+| ------------------------------ | ------------------------- | ---------------------------------- |
+| `spark.executor.memory`        | 4–32g                     | Total memory per executor          |
+| `spark.executor.cores`         | 2–5                       | Cores per executor                 |
+| `spark.executor.instances`     | Depends on cluster        | How many executors                 |
+| `spark.sql.shuffle.partitions` | 100–500                   | Tune for join/shuffle optimization |
+| `spark.memory.fraction`        | 0.6–0.8                   | For execution + storage            |
+| `spark.rpc.*` / `network.*`    | Longer timeouts if needed | For stability on large data        |
 
 
 

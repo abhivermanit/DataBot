@@ -266,7 +266,37 @@ With cache()	Spark stores intermediate results in memory for reuse
 
 
 
-3. 
+3. Timeouts & Performance Tuning
+
+"spark.executor.heartbeatInterval" -> "60s"
+"spark.network.timeout" -> "3600s"
+"spark.rpc.askTimeout" -> "3600s"
+"spark.rpc.message.maxSize" -> "850"
+
+These configs handle communication timeouts between driver and executors.
+Set to high values to prevent false timeouts during long stages or large shuffles.
+
+
+- Performance tuning is the process of optimizing a Spark application to
+
+what will perfomance tuning solve:- 
+1. Run faster
+
+2. Use fewer resources (memory, CPU, disk, network)
+
+3. Be more stable and scalable
+
+
+how is it done:- 
+
+- Cluster resources (executors, memory, cores)
+
+- Spark configs (timeouts, shuffles, serialization)
+
+- Data handling (partitioning, caching, joins)
+
+- Job logic (code structure, transformations)
+
 
 
 

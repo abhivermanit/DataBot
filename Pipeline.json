@@ -240,7 +240,7 @@ Persist - Storage Level	MEMORY_AND_DISK (default)	Customizable (e.g., MEMORY_ONL
 Caching - Usage Simplicity	Shorthand for common case	Flexible with more options
 
 
-Why Spark Recomputes Without cache() ? 
+Why Spark Recomputes Without cache()? 
 
 - Spark uses lazy evaluation, so it doesn’t immediately execute this line.
 It builds a logical execution plan (a DAG) — a graph of operations to be executed only when an action is triggered (like .count(), .collect(), .write()).
@@ -257,10 +257,11 @@ Read Parquet → Filter → Select → GroupBy
 For result2, Spark builds another DAG:
 Read Parquet → Filter → Select → Where
 
-
-
-
-
+Concept                     Behavior
+--------------   --------------------------------------
+Spark is lazy	It doesn't execute until an action is called
+Without cache()	Every action re-triggers the full upstream transformations
+With cache()	Spark stores intermediate results in memory for reuse
 
 3. 
 

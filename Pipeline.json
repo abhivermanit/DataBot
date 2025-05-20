@@ -341,13 +341,62 @@ How tuninng is done in real life :-
 
 
 
+Clusters and configurations :- 
 
+Amazon EMR (Elastic MapReduce)
+Region: us-west-2
+Cluster: emr-5.36.1
+Cluster Name: uswest2-emr5-dataingest05-gv-prod
 
+We run our Spark pipelines on Amazon EMR — specifically EMR version 5.36.1 — in the us-west-2 region. 
+It’s a production-grade cluster used for high-throughput data ingestion jobs, such as loading and transforming data into Snowflake and other downstream systems.
 
+Amazon EMR is a managed big data platform on AWS that lets you run frameworks like Spark, Hadoop, Hive on EC2 clusters without managing infrastructure manually.
 
+EC2 - Elastic Compute Cloud 
 
+Hadoop provides the underlying YARN cluster manager and HDFS (storage) for Spark and Hive jobs.
 
+Spark is your core computation engine — used for reading data (e.g. from S3), transforming it, joining, aggregating, and writing it back (e.g. to Snowflake).
+This is a stable, pre-Spark 3.x version, where you have to tune joins, shuffles, and memory more manually. Spark 3.x has adaptive query execution (AQE), but 2.4.8 does not.
 
+Scala is the programming language Spark is written in, and also the primary language used to write Spark applications in enterprise settings.
+Your code must be compiled with Scala 2.11 to be compatible with Spark 2.4.8. Libraries and dependencies must also match the Scala version.
+We developed our Spark jobs in Scala 2.11 to align with the Spark 2.4.8 runtime on EMR. This gave us tight integration with Spark’s RDD and Dataset APIs
+
+| Component  | Version | Purpose                   | What to Say in Interview                                                          |
+| ---------- | ------- | ------------------------- | --------------------------------------------------------------------------------- |
+| **EMR**    | 5.36.1  | AWS-managed Spark cluster | “EMR handled provisioning, scaling, and monitoring of our Spark pipelines.”       |
+| **Hadoop** | 2.10.1  | YARN resource management  | “YARN was used to allocate executor memory, cores, and monitor tasks.”            |
+| **Spark**  | 2.4.8   | Compute engine            | “We built ETL jobs in Spark, tuned joins, partitions, and memory usage manually.” |
+| **Hive**   | 2.3.9   | Metastore and SQL engine  | “Used for table schemas and some SQL-based batch queries.”                        |
+| **Scala**  | 2.11    | Language for Spark code   | “Our codebase was in Scala 2.11 for compatibility with Spark 2.4.”                |
+
+| Topic                  | What You Can Say                                                            |
+| ---------------------- | --------------------------------------------------------------------------- |
+| **Cluster Info**       | EMR 5.36.1 in `us-west-2` for production-grade Spark jobs                   |
+| **Spark Version**      | Spark 2.4.8 with custom tuning (executors, memory, timeouts)                |
+| **Job Type**           | ETL ingestion pipelines into Snowflake with scheduling via Oozie/Airflow    |
+| **Performance Tuning** | Managed GC stalls, executor losses, shuffle joins using Spark configs       |
+| **Monitoring**         | Used Spark UI, CloudWatch, and S3 logs for deep debugging and optimizations |
+
+Most of our jobs are large-scale ETL pipelines — reading from S3, doing enrichment and joins, then writing to Snowflake.
+We handle both batch and scheduled near-real-time jobs orchestrated via Oozie or Airflow.
+
+Some common fixes in the project :- 
+
+- Some jobs read 200–500 GB of raw data per run. One common issue was executor timeouts during wide joins — we resolved this by increasing network timeouts and tuning the broadcast threshold.
+- Our pipelines were built in Spark 2.4.8, which meant we manually tuned shuffle partitions and caching logic.
+I worked with transformations like groupBy, join, withColumn, and optimized wide joins by leveraging broadcast joins and partitioning logic.
+- Your code must be compiled with Scala 2.11 to be compatible with Spark 2.4.8. Libraries and dependencies must also match the Scala version.
+- Some pipelines were impacted by skewed joins where one key had significantly more data. 
+I resolved this by detecting skew from the stage-level metrics in Spark UI and implemented salting + repartitioning. techniques during joins
+- In a pipeline that calculated aggregates over multiple partitions and involved window functions, the same filtered DataFrame was used in multiple actions.
+Without caching, it was recomputed for each action. I used df.cache() strategically after expensive transformations to avoid recomputation and reduced job time from ~45 minutes to 20 minutes.
+- For pipelines writing to Snowflake, we noticed high latency and failures during writes when partition sizes were inconsistent.
+We tuned the batch size in spark-snowflake connector and used coalesce() before writes to reduce the number of partitions, improving write throughput.
+- We also disabled truncate_table in overwrite mode to avoid full table reloads unless necessary.
+- I noticed large shuffle file sizes (~2–3 GB). I increased spark.shuffle.file.buffer and spark.reducer.maxSizeInFlight to handle larger blocks, and ensured shuffle spill compression was enabled.
 
 
 
